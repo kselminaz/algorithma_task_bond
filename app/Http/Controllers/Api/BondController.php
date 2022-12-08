@@ -14,6 +14,7 @@ class BondController extends Controller
 
         $bond=Bond::find($id);
         if(!$bond)
+            return BaseController::jsonResponse(0,[],"The bond is not found",404);
 
         $interestCalculationPeriod=$bond->interest_calculation_period;
         $couponPayoutFrequency=$bond->coupon_payout_frequency;
