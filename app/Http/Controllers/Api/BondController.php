@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\BondPayoutController;
 use App\Http\Controllers\Controller;
 use App\Models\Bond;
 use Carbon\Carbon;
@@ -16,10 +17,7 @@ class BondController extends Controller
         if(!$bond)
             return BaseController::jsonResponse(0,[],"The bond is not found",404);
 
-        $interestCalculationPeriod=$bond->interest_calculation_period;
-        $couponPayoutFrequency=$bond->coupon_payout_frequency;
-
-        //Faizlərin Hesablanma Periodunun teyini
+       /* //Faizlərin Hesablanma Periodunun teyini
         switch ($interestCalculationPeriod) {
             case 360:
                 $periodWithDay = 360 / $couponPayoutFrequency;
@@ -30,15 +28,10 @@ class BondController extends Controller
             case 365:
                 $periodWithDay = 365 / $couponPayoutFrequency;
             break;
-        }
+        }*/
 
        //Faiz odenilme tarixlerinin teyini
-        $dates=[];
-        $interestPayoutDate=Carbon::parse($bond->issue_date)->addDay($periodWithDay);
-        while($interestPayoutDate<Carbon::parse($bond->last_circulation_date)){
-            array_push($dates,["date"=>BaseController::availablePayoutDate($interestPayoutDate)]);
-            $interestPayoutDate=$interestPayoutDate->addDay($periodWithDay);
-        }
+        $dates=BondPayoutController::bondPayoutDates($id);
         return BaseController::jsonResponse(1,$dates,"Interest Payout Dates",200);
 
     }

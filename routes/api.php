@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\BondOrderController;
 
 Route::get('bond/{id}/payouts',[BondController::class,'bondPayouts']);
 Route::post('bond/{id}/order',[BondOrderController::class,'bondOrder']);
-
+Route::post('bond/order/{order_id}',[BondOrderController::class,'bondOrderPayouts']);
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

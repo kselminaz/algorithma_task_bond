@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\BondPayoutController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BondOrderRequest;
 use App\Http\Resources\BondOrderResource;
@@ -46,6 +47,46 @@ class BondOrderController extends Controller
 
         $bondOrder=new BondOrderResource($bondOrder);
         return BaseController::jsonResponse(1,$bondOrder,"Bond Order Model",200);
+
+    }
+
+    public function bondOrderPayouts($order_id){
+
+        $bondOrder=BondOrder::find($order_id);
+        if(!$bondOrder)
+            return BaseController::jsonResponse(0,[],"The bond order is not found",404);
+
+        $bond_id=$bondOrder->bond_id;
+        $bond=Bond::find($bond_id);
+
+        //Istiqrazin faiz odenilme tarixleri alinir
+        $dates=BondPayoutController::bondPayoutDates($bond_id);
+
+        //Faizlerin hesablanma periodu
+        $periodWithDay=BondPayoutController::periodWithDay($bond_id);
+
+        /*Istiqrazin faiz odenilme tarixleri bir bir yoxlanilir,istiqrazin sifarish
+         tarixinden sonraki tarixler uchun odenilecek mebleg hesablanir*/
+        $response_array=[];
+        $passed_days=1;
+        foreach ($dates as $key=>$date){
+            if(Carbon::parse($date['date'])>Carbon::parse($bondOrder->order_date)){
+                //Kechen gunlerin hesablanmasi uchun
+                //Eger ilk odenish gunudurse
+               if(count($response_array)==0)
+               $passed_days=Carbon::parse($dates[$key]['date'])->diffInDays(Carbon::parse($bondOrder->order_date));
+               //novbeti odenish gunleri uchun
+                else
+                $passed_days=Carbon::parse($dates[$key-1]['date'])->diffInDays(Carbon::parse($date['date']));
+                $amount = ($bond->nominal_price / 100 * $bond->coupon_interest ) / $periodWithDay
+                * $passed_days * $bondOrder->bond_order_count;
+                array_push($response_array,["date"=>$date['date'],"amount"=>round($amount,4)]);
+            }
+
+        }
+        return BaseController::jsonResponse(1,$response_array,"Order payout dates and amounts",200);
+
+
 
     }
 }
