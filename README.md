@@ -14,7 +14,7 @@
   - bond interest payout dates
   - create bond order
   - bond interest payout date and amount for bond order
-  
+
   All api's responses are in the same response format:{status,data,message}
 
 ## About bond interest payout dates
@@ -65,8 +65,9 @@
 
 ### Error codes
 <p>order_date and order_count parameters must be passed and they must be in date format and numeric greater than 0.Response code is 400 
+and  validation errors are shown.
 </p>
-<p>Order_date bond must be between  "emissiya tarixi"(issue_date) and "son tedavul tarixi"(last_circulation_date).For wrong order_date parametr the response code will be 400 </p> 
+<p>Order_date bond must be between  "emissiya tarixi"(issue_date) and "son tedavul tarixi"(last_circulation_date).For wrong order_date parametr the response code will be 400 and  error message is shown </p> 
 
 ### Right parameters and the example
 
