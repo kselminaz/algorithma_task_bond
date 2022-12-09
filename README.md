@@ -6,6 +6,8 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
+# Algorithma Bond Task
+
 
 ## Api larin istifadesi
 
@@ -15,13 +17,14 @@ Api response larin verilme qaydasi [status,data,message] seklinde olacaq
 
 ## Bond Order Api istifadesi
 
-Api a muraciet POST metodu ile,/api/bond/{id}/order linki ile aparilir.
-Api response lar asagidaki hallardan biri ola biler.
-1.Eger bu id ile bond bazada yoxdursa,404 status code qayidacaq.
-2.2 parametr teleb olunur,order_date ve order_count,bu parametrler uchun order_date teleb olunan(required) ve date formatda olmasi,order_count teleb olunan(required) ve eded olmasi ve min 1 deyerini almasidir,eger bu teleb olunan validasiya xetalarindan biri bash vererse 400 status code qayidacaq ve error message lar verilecek.
-3.Order_date bond un emissiya tarixi(issue_date) ve son tedavul tarixi(last_circulation_date) arasinda deyilse 400 status code qayidacaq ve error message verilecek.
-4.Eger butun parametrler dogru daxil edilibse order save edilecek ve BondOrder modeli 200 status code la verilecek.
-5.Dogru parametrler ve ona uygun response a numune:
+-Api a muraciet POST metodu ile,/api/bond/{id}/order linki ile aparilir.
+-Api response lar asagidaki hallardan biri ola biler.
+-1.Eger bu id ile bond bazada yoxdursa,404 status code qayidacaq.
+-2.2 parametr teleb olunur,order_date ve order_count,bu parametrler uchun order_date teleb olunan(required) ve date formatda olmasi,order_count teleb olunan(required) ve eded olmasi ve min 1 deyerini almasidir,eger bu teleb olunan validasiya xetalarindan biri bash vererse 400 status code qayidacaq ve error message lar verilecek.
+-3.Order_date bond un emissiya tarixi(issue_date) ve son tedavul tarixi(last_circulation_date) arasinda deyilse 400 status code qayidacaq ve error message verilecek.
+-4.Eger butun parametrler dogru daxil edilibse order save edilecek ve BondOrder modeli 200 status code la verilecek.
+-5.Dogru parametrler ve ona uygun response a numune:
+...
 Parametrs:
   order_date: 15.10.2022
   order_count: 5
@@ -44,3 +47,4 @@ Response:
     },
     "message": "Bond Order Model"
 }
+...
