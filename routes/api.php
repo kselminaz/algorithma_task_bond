@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BondController;
+use App\Http\Controllers\Api\BondOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\BondController;
 
 
 Route::get('bond/{id}/payouts',[BondController::class,'bondPayouts']);
+Route::post('bond/{id}/order',[BondOrderController::class,'bondOrder']);
 
 
 

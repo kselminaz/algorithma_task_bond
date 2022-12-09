@@ -12,6 +12,7 @@ class BondOrder extends Model
 
     protected $table = 'bond_orders';
     protected $guarded = [];
+    protected $load='bond';
 
     public function bond(){
         return $this->belongsTo(Bond::class);
