@@ -10,15 +10,26 @@ use App\Models\Bond;
 use App\Models\BondOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BondOrderController extends Controller
 {
-    public function bondOrder($id,BondOrderRequest $request){
+    public function bondOrder($id,Request $request){
 
         $bond=Bond::find($id);
         if(!$bond)
             return BaseController::jsonResponse(0,[],"The bond is not found",404);
 
+        $validator = Validator::make($request->all(), [
+
+            'order_date'=>['required','date'],
+            'order_count'=>['required','numeric','min:1'],
+
+        ]);
+        if ($validator->fails()) {
+
+            return BaseController::jsonResponse(false,[],$validator->errors(),400);
+        }
         if(Carbon::parse($request->order_date)<Carbon::parse($bond->issue_date)){
             return BaseController::jsonResponse(0,[],"The order date is less than the bond issue date",400);
         }
