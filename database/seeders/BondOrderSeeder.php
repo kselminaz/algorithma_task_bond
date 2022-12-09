@@ -18,7 +18,7 @@ class BondOrderSeeder extends Seeder
         foreach (  DB::table('bonds')->get() as $item){
 
             DB::table('bond_orders')->insert([
-                ['bond_id' => $item->id, 'order_date' => Carbon::parse($item->last_circulation_date)->subDays(10), 'bond_order_count' => rand(10,30)],
+                ['bond_id' => $item->id, 'order_date' => Carbon::parse($item->last_circulation_date)->subDays(90), 'bond_order_count' => rand(10,30)],
             ]);
 
         }

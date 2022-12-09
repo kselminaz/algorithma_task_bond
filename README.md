@@ -7,42 +7,113 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## Api larin istifadesi
+# Algorithma bond task
 
-Api response larin verilme qaydasi [status,data,message] seklinde olacaq
+## Apis
+  3 api link is created in the task
+  - bond interest payout dates
+  - create bond order
+  - bond interest payout date and amount for bond order
 
+  All api's responses are in the same response format:{status,data,message}
 
+## About bond interest payout dates
 
-## Bond Order Api istifadesi
-
-<p>Api a muraciet POST metodu ile,/api/bond/{id}/order linki ile aparilir.</p>
-<p>Api response lar asagidaki hallardan biri ola biler.</p>
-<div>
-1.Eger bu id ile bond bazada yoxdursa,404 status code qayidacaq.
-2.2 parametr teleb olunur,order_date ve order_count,bu parametrler uchun order_date teleb olunan(required) ve date formatda olmasi,order_count teleb olunan(required) ve eded olmasi ve min 1 deyerini almasidir,eger bu teleb olunan validasiya xetalarindan biri bash vererse 400 status code qayidacaq ve error message lar verilecek.
-3.Order_date bond un emissiya tarixi(issue_date) ve son tedavul tarixi(last_circulation_date) arasinda deyilse 400 status code qayidacaq ve error message verilecek.
-4.Eger butun parametrler dogru daxil edilibse order save edilecek ve BondOrder modeli 200 status code la verilecek.
-5.Dogru parametrler ve ona uygun response a numune:
-Parametrs:
-  order_date: 15.10.2022
-  order_count: 5
-Response:
-{
+  <p> API link: /api/bond/{bond_id}/payouts . The method GET</p>
+  <p> If the bond is not found with bond_id the response code will be 404,the response as 
+  <code>
+   {
+    "status": 0,
+    "data": [],
+    "message": "the bond is not found "
+  }
+  </code>
+  <p> Api link /api/bond/9/payouts </p>
+   Api result
+   <code>
+   {
     "status": 1,
-    "data": {
-        "id": 6,
-        "bond": {
-            "id": 9,
-            "issue_date": "2021-11-08",
-            "last_circulation_date": "2022-12-30",
-            "nominal_price": 100,
-            "coupon_payout_frequency": "4",
-            "interest_calculation_period": "360",
-            "coupon_interest": 10
+    "data": [
+        {
+            "date": "2022-02-07"
         },
-        "order_date": "2022-10-15",
-        "bond_order_count": "5"
-    },
-    "message": "Bond Order Model"
+        {
+            "date": "2022-05-09"
+        },
+        {
+            "date": "2022-08-08"
+        },
+        {
+            "date": "2022-11-07"
+        }
+    ],
+    "message": "Interest Payout Dates"
+  }
+  </code>
+   
+## About create new  bond order
+
+  <p> Api link: /api/bond/{id}/order . The method POST</p>
+  <p> If the bond is not found with 'id' the response code will be 404,the response as 
+  <code>
+   {
+    "status": 0,
+    "data": [],
+    "message": "the bond is not found "
+  }
+  </code>
+
+### Error codes
+<p>order_date and order_count parameters must be passed and they must be in date format and numeric greater than 0.Response code is 400 
+and  validation errors are shown.
+</p>
+<p>Order_date bond must be between  "emissiya tarixi"(issue_date) and "son tedavul tarixi"(last_circulation_date).For wrong order_date parametr the response code will be 400 and  error message is shown </p> 
+
+### Right parameters and the example
+
+ Parametrs: order_date: 15.10.2022 order_count:5
+
+ Response with 200 status code: 
+
+ <code>{ "status": 1, "data": { "id": 6, "bond": { "id": 9, "issue_date": "2021-11-08", "last_circulation_date": "2022-12-30", "nominal_price": 100, "coupon_payout_frequency": "4", "interest_calculation_period": "360", "coupon_interest": 10 }, "order_date": "2022-10-15", "bond_order_count": "5" }, "message": "Bond Order Model" } 
+ </code>
+
+ ## About bond order payouts and amounts
+
+ <p> Api link: /api/bond/order/{order_id} .The method POST </p>
+  <p> If the bond is not found with 'order_id' the response code will be 404,the response as 
+  <code>
+   {
+    "status": 0,
+    "data": [],
+    "message": "the bond order is not found "
+  }
+  </code>
+
+  The response example:
+
+   /api/bond/order/6
+
+   Response with 200 status code
+  <code>
+    {
+    "status": 1,
+    "data": [
+        {
+            "date": "2022-05-09",
+            "amount": 13.3333
+        },
+        {
+            "date": "2022-08-08",
+            "amount": 50.5556
+        },
+        {
+            "date": "2022-11-07",
+            "amount": 50.5556
+        }
+    ],
+    "message": "Order payout dates and amounts"
 }
-</div>
+  </code>
+
+  
